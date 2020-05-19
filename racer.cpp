@@ -4,6 +4,8 @@
 #include "images\zoomNumbers.h"
 #endif
 
+// #define DEBUG_PERF
+
 char string[30];
 SaveData saveData;
 float ZOOM_TIME = 6000.0f;
@@ -1207,5 +1209,9 @@ void racerLoop()
     }
   }
 
+  #ifdef DEBUG_PERF
+  sprintf(string,"%2u",getFrameMs());
+  cross_print(128-12,64-12,1,string);
+  #endif
   cross_loop_end();
 }
