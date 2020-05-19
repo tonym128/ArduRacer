@@ -4,6 +4,9 @@
 #include "images\zoomNumbers.h"
 #endif
 
+// #define NO_TROPHY
+#define NO_LOGO
+
 // #define DEBUG_PERF
 #ifndef ARDUINO
 #define PSTR
@@ -835,10 +838,9 @@ void drawContinueMenu()
 
 void drawTrophySheet()
 {
-  cross_drawHLine(0, 13, 128, 1);
-  cross_drawHLine(0, 26, 128, 1);
-  cross_drawHLine(0, 39, 128, 1);
-  cross_drawHLine(0, 52, 128, 1);
+  for (int i = 13; i < 53; i += 13) 
+    cross_drawHLine(0, i, 128, 1);
+
   cross_print(3, 17, 1, PSTR("G"));
   cross_print(1, 31, 1, PSTR("S"));
   cross_print(3, 43, 1, PSTR("B"));
@@ -905,8 +907,10 @@ void drawAllTimes()
 
 void drawTrophy()
 {
+#ifndef NO_TROPHY
   cross_drawBitmapTile(0, 0, 32, 64, 1, 0, 1, (unsigned char *)Trophy);
   cross_drawBitmapTile(32, 0, 32, 64, 1, 1, 1, (unsigned char *)Trophy);
+#endif
 
   if (gameState->curlap == 0)
   {
@@ -978,7 +982,9 @@ void racerLoop()
       gameState->lastmode = gameState->mode;
       gameState->timeout = 1000;
       cross_clear_screen();
+      #ifndef NO_LOGO
       cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
+      #endif
     }
     else
     {
@@ -998,7 +1004,9 @@ void racerLoop()
     else
     {
       cross_clear_screen();
+      #ifndef NO_LOGO
       cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
+      #endif
       processMenu();
       updateMenu();
       displayMenu(gameState->menuItem);
@@ -1012,7 +1020,11 @@ void racerLoop()
     else
     {
       cross_clear_screen();
+      
+      #ifndef NO_LOGO
       cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
+      #endif
+  
       processMenu();
       updateOptionsMenu();
       displayOptionsMenu(gameState->menuItem);
