@@ -23,7 +23,7 @@
 //#define NO_SPEED_HACK
 
 //Uncomment RESIZE_HACK for fast drawResized with resize >= 1.0
-//#define RESIZE_HACK
+#define RESIZE_HACK
 
 #include <Arduino.h>
 

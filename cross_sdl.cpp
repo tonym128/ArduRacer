@@ -181,23 +181,6 @@ void cross_print(int x, int y, int size, char *string)
 	}
 }
 
-void cross_drawBitmapTile(int x, int y, unsigned char *bitmap)
-{
-	int counter = 0;
-	for (int y2 = y; y2 < y + 64; y2++)
-	{
-		for (int x2 = x; x2 < x + 64; x2++)
-		{
-			if (x2 >= 0 && x2 < 128 && y2 >= 0 && y2 < 64)
-			{
-				consoleBuffer[x2 + y2 * 128] = ((bool *)bitmap)[counter];
-			}
-
-			counter++;
-		}
-	}
-}
-
 static void resizeObject(int dimwidth, int dimheight, double zoom, const bool *object, bool *resized)
 {
 	int counter = 0;
@@ -212,22 +195,6 @@ static void resizeObject(int dimwidth, int dimheight, double zoom, const bool *o
 	}
 }
 
-void cross_drawBitmapTile(int x, int y, int width, int height, unsigned char *bitmap)
-{
-	int counter = 0;
-	for (int y2 = y; y2 < y + height; y2++)
-	{
-		for (int x2 = x; x2 < x + width; x2++)
-		{
-			if (x2 >= 0 && x2 < 128 && y2 >= 0 && y2 < 64)
-			{
-				consoleBuffer[x2 + y2 * 128] = ((bool *)bitmap)[counter];
-			}
-
-			counter++;
-		}
-	}
-}
 
 void cross_drawBitmapTile(int x, int y, int width, int height, int colour, int mirror, float zoom, unsigned char *tile)
 {

@@ -5,6 +5,9 @@
 #endif
 
 // #define DEBUG_PERF
+#ifndef ARDUINO
+#define PSTR
+#endif
 
 char string[30];
 SaveData saveData;
@@ -327,18 +330,18 @@ bool isKthBitSet(int n, int k)
 void setLevelTimeString(char number, unsigned int time)
 {
 #ifdef ARDUINO
-  sprintf(string, "%c-%2u.%02u", number, time / 1000, time / 10 % 100);
+  sprintf(string, PSTR("%c-%2u.%02u"), number, time / 1000, time / 10 % 100);
 #else
-  sprintf_s(string, "%c-%2u.%02u", number, time / 1000, time / 10 % 100);
+  sprintf_s(string, PSTR("%c-%2u.%02u"), number, time / 1000, time / 10 % 100);
 #endif
 }
 
 void setLevelString()
 {
 #ifdef ARDUINO
-  sprintf(string, "Level %d", gameState->level);
+  sprintf(string, PSTR("Level %d"), gameState->level);
 #else
-  sprintf_s(string, "Level %d", gameState->level);
+  sprintf_s(string, PSTR("Level %d"), gameState->level);
 #endif
 }
 
@@ -370,7 +373,7 @@ void displayGameMode()
 #ifdef SPACE_SAVER
       cross_drawBitmapTile(inlinex, inliney, 64, 64, 1, getTileRotation(levelTile), 1.0f, (unsigned char *)getTile(levelTile));
 #else
-      cross_drawBitmapTile(inlinex, inliney, (unsigned char *)getTile(levelTile));
+      cross_drawBitmapTile(inlinex, inliney, 64, 64, 1, 0, 1 ,(unsigned char *)getTile(levelTile));
 #endif
 
       if (levelTile > 23)
@@ -489,12 +492,12 @@ void displayGameMode()
 
   // Display laptimer
 #ifdef ARDUINO
-  sprintf(string, " %d/%d", gameState->checkpointpassed, gameState->checkpoints);
+  sprintf(string, PSTR(" %d/%d"), gameState->checkpointpassed, gameState->checkpoints);
   cross_print(42, 0, 1, string);
   setLevelTimeString(gameState->curlap + 1 + 48, gameState->laptimes[(gameState->curlap)]);
   cross_print(0, 0, 1, string);
 #else
-  sprintf_s(string, "%d-%2u.%02u %d/%d", gameState->curlap + 1, gameState->laptimes[(gameState->curlap)] / 1000, gameState->laptimes[(gameState->curlap)] / 10 % 100, gameState->checkpointpassed, gameState->checkpoints);
+  sprintf_s(string, PSTR("%d-%2u.%02u %d/%d"), gameState->curlap + 1, gameState->laptimes[(gameState->curlap)] / 1000, gameState->laptimes[(gameState->curlap)] / 10 % 100, gameState->checkpointpassed, gameState->checkpoints);
   cross_print(0, 0, 1, string);
 #endif
 
@@ -520,12 +523,12 @@ void displayGameMode()
 
   if (gameState->paused)
   {
-    cross_print(0, 20, 3, " Paused ");
+    cross_print(0, 20, 3, PSTR(" Paused "));
     for (int i = 0; i < 16; i++)
       cross_drawHLine(0, i + 48, 64, 0);
 
-    cross_print(0, 48, 1, "A / B - Continue");
-    cross_print(0, 56, 1, "Down - Level Select");
+    cross_print(0, 48, 1, PSTR("A / B - Continue"));
+    cross_print(0, 56, 1, PSTR("Down - Level Select"));
   }
 }
 
@@ -584,20 +587,34 @@ void processMenu()
 
 void displayOptionsMenu(int menuItem)
 {
-  cross_print(90, 30 + 0, 1, "About");
-  cross_print(90, 30 + 8, 1, "Sound");
-  cross_print(90, 30 + 16, 1, "Delete");
-  cross_print(90, 30 + 24, 1, "Back");
+  cross_print(90, 30 + 0, 1, PSTR("About"));
+  cross_print(90, 30 + 8, 1, PSTR("Sound"));
+  cross_print(90, 30 + 16, 1, PSTR("Delete"));
+  cross_print(90, 30 + 24, 1, PSTR("Back"));
   if (saveData.sound)
-    cross_print(90 + 5 * 6, 30 + 8, 1, "*");
+    cross_print(90 + 5 * 6, 30 + 8, 1, PSTR("*"));
 
-  cross_print(84, 30 + menuItem * 8, 1, "*");
+  cross_print(84, 30 + menuItem * 8, 1, PSTR("*"));
+}
+
+void displayAbout() {
+  cross_clear_screen();
+  cross_drawBitmapTile(0, 8, 48, 48, 1, 0, 1, (unsigned char *)Me);
+  cross_print(60, 0, 1, PSTR("Made By"));
+  cross_print(60, 20, 1, PSTR("github"));
+  cross_print(60, 40, 1, PSTR("twitter"));
+  for (int i = 0; i < 3; i++) {
+    cross_print(70, 10 + i * 20, 1, PSTR("tonym128"));
+  }
 }
 
 void updateOptionsMenu() {
 if (gameState->enter)
   switch (gameState->menuItem) {
-    // Options Menu
+    case 0:
+      gameState->mode = 3;
+      gameState->enter = false;
+      gameState->timeout = 1000;
     case 1:
       // Toggle Sound
       saveData.sound = !saveData.sound;
@@ -652,12 +669,12 @@ void updateMenu()
 
 void displayMenu(int menuItem)
 {
-  cross_print(90, 30 + 0, 1, "Cont");
-  cross_print(90, 30 + 8, 1, "Start");
-  cross_print(90, 30 + 16, 1, "Times");
-  cross_print(90, 30 + 24, 1, "Option");
+  cross_print(90, 30 + 0, 1, PSTR("Cont"));
+  cross_print(90, 30 + 8, 1, PSTR("Start"));
+  cross_print(90, 30 + 16, 1, PSTR("Times"));
+  cross_print(90, 30 + 24, 1, PSTR("Option"));
 
-  cross_print(84, 30 + menuItem * 8, 1, "*");
+  cross_print(84, 30 + menuItem * 8, 1, PSTR("*"));
 }
 
 void displayMap()
@@ -712,8 +729,8 @@ void displayLevelInfo()
   {
     if ((getCurrentMs() / 1000) % 2 == 0)
     {
-      cross_print(64, 64 - 16, 1, "Press A");
-      cross_print(64, 64 - 8, 1, "To Start");
+      cross_print(64, 64 - 16, 1, PSTR("Press A"));
+      cross_print(64, 64 - 8, 1, PSTR("To Start"));
     }
   }
 };
@@ -773,6 +790,7 @@ bool displayLevelZoom()
   if (headtoy > FIXP_TO_FLOAT(gameState->player1.Y) - 32)
     headtoy = FIXP_TO_FLOAT(gameState->player1.Y) - 32;
 
+
   headtox *= (pixelSize / 64.0f);
   headtoy *= (pixelSize / 64.0f);
 
@@ -789,7 +807,7 @@ bool displayLevelZoom()
       {
 #ifdef SPACE_SAVER
         int LevelTile = getLevelTile(gameState->level, x, y);
-        cross_drawBitmapTile((int)(x * pixelSize - headtox), (int)(y * pixelSize - headtoy), 64, 64, 1, getTileRotation(LevelTile), zoom, (unsigned char *)getTile(getLevelTile(gameState->level, x, y)));
+        cross_drawBitmapTile((int)(x * pixelSize - headtox), (int)(y * pixelSize - headtoy), 64, 64, 1, getTileRotation(LevelTile), zoom, (unsigned char *)getTile(LevelTile));
 #else
         cross_drawBitmapTile((int)(x * pixelSize - headtox), (int)(y * pixelSize - headtoy), 64, 64, 1, 0, zoom, (unsigned char *)getTile(getLevelTile(gameState->level, x, y)));
 #endif
@@ -810,8 +828,8 @@ void drawContinueMenu()
   if ((getCurrentMs() / 1000) % 2 == 0)
   {
     if (saveData.maxLevel > gameState->level)
-      cross_print(64, 64 - 16, 1, "A - Next");
-    cross_print(64, 64 - 8, 1, "B - Retry");
+      cross_print(64, 64 - 16, 1, PSTR("A - Next"));
+    cross_print(64, 64 - 8, 1, PSTR("B - Retry"));
   }
 }
 
@@ -821,16 +839,16 @@ void drawTrophySheet()
   cross_drawHLine(0, 26, 128, 1);
   cross_drawHLine(0, 39, 128, 1);
   cross_drawHLine(0, 52, 128, 1);
-  cross_print(3, 17, 1, "G");
-  cross_print(1, 31, 1, "S");
-  cross_print(3, 43, 1, "B");
+  cross_print(3, 17, 1, PSTR("G"));
+  cross_print(1, 31, 1, PSTR("S"));
+  cross_print(3, 43, 1, PSTR("B"));
 
   for (int level = 0; level < 10; level++)
   {
 #ifdef ARDUINO
-    sprintf(string, "%d", level + 1);
+    sprintf(string, PSTR("%d"), level + 1);
 #else
-    sprintf_s(string, "%d", level + 1);
+    sprintf_s(string, PSTR("%d"), level + 1);
 #endif
     cross_print(16 + level * 11, 3, 1, string);
     cross_drawVLine(15 + level * 11, 0, 53, 1);
@@ -843,7 +861,7 @@ void drawTrophySheet()
         if (saveData.BestLapTimes[level] < LevelTimes[level][i])
 #endif
         {
-          cross_print(17 + level * 11, 4 + (1 + i) * 13, 1, "X");
+          cross_print(17 + level * 11, 4 + (1 + i) * 13, 1, PSTR("X"));
           break;
         }
       }
@@ -865,7 +883,7 @@ void drawGoalTimes()
   cross_drawHLine(64, 46, 64, 1);
 
   drawContinueMenu();
-  cross_print(0, 64 - 7, 1, "L - Times");
+  cross_print(0, 64 - 7, 1, PSTR("L - Times"));
 }
 
 void drawAllTimes()
@@ -881,7 +899,7 @@ void drawAllTimes()
   }
 
   drawContinueMenu();
-  cross_print(0, 64 - 7, 1, "R - Goal");
+  cross_print(0, 64 - 7, 1, PSTR("R - Goal"));
   cross_drawHLine(64, 64 - 17, 128 - 64, 1);
 }
 
@@ -931,17 +949,17 @@ void inputTrophy()
 
 void buildDeleteString(char button) {
 #ifdef ARDUINO
-  sprintf(string,"%c - Delete",button);
+  sprintf(string,PSTR("%c - Delete"),button);
 #else
-  sprintf_s(string,"%c - Delete",button);
+  sprintf_s(string,PSTR("%c - Delete"),button);
 #endif
 }
 
 void buildAbortString(char button) {
 #ifdef ARDUINO
-  sprintf(string,"%c - Abort",button);
+  sprintf(string,PSTR("%c - Abort"),button);
 #else
-  sprintf_s(string,"%c - Abort",button);
+  sprintf_s(string,PSTR("%c - Abort"),button);
 #endif
 }
 
@@ -960,7 +978,7 @@ void racerLoop()
       gameState->lastmode = gameState->mode;
       gameState->timeout = 1000;
       cross_clear_screen();
-      cross_drawBitmapTile(0, 0, 128, 64, (unsigned char *)ArduRacerLogo);
+      cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
     }
     else
     {
@@ -980,7 +998,7 @@ void racerLoop()
     else
     {
       cross_clear_screen();
-      cross_drawBitmapTile(0, 0, 128, 64, (unsigned char *)ArduRacerLogo);
+      cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
       processMenu();
       updateMenu();
       displayMenu(gameState->menuItem);
@@ -994,13 +1012,22 @@ void racerLoop()
     else
     {
       cross_clear_screen();
-      cross_drawBitmapTile(0, 0, 128, 64, (unsigned char *)ArduRacerLogo);
+      cross_drawBitmapTile(0, 0, 128, 64, 1, 0, 1, (unsigned char *)ArduRacerLogo);
       processMenu();
       updateOptionsMenu();
       displayOptionsMenu(gameState->menuItem);
     }
     break;
-
+  case 3: // Aout
+      doTimeout();
+      displayAbout();
+      if (gameState->timeout <= 0) {
+        if (cross_input_a() || cross_input_b()) {
+          gameState->timeout = 100;
+          gameState->mode = 2;
+        }
+      }
+      break;
   case 4: // Level Start
     if (gameState->lastmode != gameState->mode)
     {
@@ -1210,7 +1237,7 @@ void racerLoop()
   }
 
   #ifdef DEBUG_PERF
-  sprintf(string,"%2u",getFrameMs());
+  sprintf(string,PSTR("%2u"),getFrameMs());
   cross_print(128-12,64-12,1,string);
   #endif
   cross_loop_end();

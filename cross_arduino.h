@@ -11,8 +11,6 @@ void cross_print(int x, int y, int size, char *string);
 void cross_drawPixel(int x, int y, bool colour);
 void cross_drawVLine(int x, int y, int length, bool colour);
 void cross_drawHLine(int x, int y, int length, bool colour);
-void cross_drawBitmapTile(int x, int y, unsigned char *tile);
-void cross_drawBitmapTile(int x, int y, int width, int height, unsigned char *tile);
 void cross_drawBitmapTile(int x, int y, int width, int height, int colour, int mirror, float zoom, unsigned char *tile);
 bool cross_getPixel(int x, int y);
 void cross_setup();

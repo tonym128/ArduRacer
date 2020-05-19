@@ -84,16 +84,6 @@ void cross_drawVLine(int x, int y, int length, bool colour)
     arduboy.drawFastVLine(x,y,length,colour);
 }
 
-void cross_drawBitmapTile(int x, int y, unsigned char *tile)
-{
-    ardbitmap.drawCompressed(x, y, tile, 1, 0, 0);
-}
-
-void cross_drawBitmapTile(int x, int y, int width, int height, unsigned char *tile)
-{
-    ardbitmap.drawCompressed(x, y, tile, 1, 0, 0);
-}
-
 void cross_drawBitmapTile(int x, int y, int width, int height, int colour, int mirror, float zoom, unsigned char *tile)
 {
     ardbitmap.drawCompressedResized(x, y, tile, colour, 0, mirror, zoom);
