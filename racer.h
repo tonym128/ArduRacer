@@ -7,8 +7,6 @@
 
 #ifdef ARDUINO
 #include "cross_arduino.h"
-// #include "ATMlib.h"
-#include "song.h"
 #else
 #include <stdint.h>
 #include <stdio.h>
