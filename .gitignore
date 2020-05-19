@@ -32,6 +32,6 @@
 *.app
 
 # Folders
-/build
-/SDL2
-/.vscode
+/build/
+/SDL2/
+/.vscode/

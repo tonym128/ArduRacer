@@ -25,6 +25,6 @@ unsigned long getCurrentMs();
 void cross_save(int saveStartAddress, SaveData saveData);
 SaveData cross_load(int saveStartAddress);
 
-void cross_playSound(uint16_t hertz, uint8_t duration);
+void cross_playSound(bool makeSound, uint16_t hertz, uint8_t duration);
 
 #endif

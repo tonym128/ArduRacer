@@ -321,7 +321,7 @@ void cross_clear_screen()
 	memset(consoleBuffer, 0, 128 * 64);
 }
 
-void cross_playSound(uint16_t hertz, uint8_t duration) {
+void cross_playSound(bool makeSound, uint16_t hertz, uint8_t duration) {
 };
 
 bool cross_loop_start()

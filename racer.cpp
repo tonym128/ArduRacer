@@ -4,10 +4,6 @@
 #include "images\zoomNumbers.h"
 #endif
 
-// #ifdef ARDUINO
-// ATMsynth ATM;
-// #endif
-
 char string[30];
 SaveData saveData;
 float ZOOM_TIME = 6000.0f;
@@ -273,11 +269,11 @@ void updateGameMode()
               saveData.BestLapTimes[gameState->level - 1] = gameState->laptimes[(gameState->curlap)];
 
             #ifdef ARDUINO
-              unsigned int levelTime = pgm_read_dword(LevelTimes[gameState->level - 1] + 1);
+              unsigned int levelTime = pgm_read_dword(LevelTimes[gameState->level - 1] + 2);
             #else
               unsigned int levelTime = LevelTimes[gameState->level - 1][2];
             #endif
-              if (saveData.BestLapTimes[gameState->level - 1] < levelTime) { // If the time is better than 2nd place, we can go forwards
+              if (saveData.BestLapTimes[gameState->level - 1] < levelTime) { // If the time is better than 3rd place, we can go forwards
                 if (saveData.maxLevel < gameState->level+1 && gameState->level < 10) 
                   saveData.maxLevel = gameState->level+1;
               }
@@ -494,7 +490,8 @@ void displayGameMode()
     cross_drawVLine(128-10-6+i,0,6,0);
   }
   if (gameState->player1.offRoad && gameState->player1.acceleration.force != 0) {
-    if (((gameState->laptimes[(gameState->curlap)] / 100) % 3) == 0) cross_playSound(100,30);
+    if (((gameState->laptimes[(gameState->curlap)] / 100) % 3) == 0) 
+        cross_playSound(saveData.sound, 100,30);
   }
 
   for (int i=0;i <= FIXP_TO_FLOAT(gameState->player1.acceleration.force * 3); i++) {
@@ -958,11 +955,12 @@ void racerLoop()
       float mod = (1000.0f - distance) / 1000.0f;
       int numMod = (int)(32 * mod);
       cross_drawBitmapTile(32 + numMod, 0 + numMod, 64, 64, 1, 0, 1.0f - mod, (unsigned char *)getNumber(number));
-      if (number >= 0 && lastnumber != number) cross_playSound(440, 100);
+      if (number >= 0 && lastnumber != number) 
+        cross_playSound(saveData.sound, 440, 100);
       if (gameState->timeout <= 0)
       {
         gameState->mode = 10;
-        cross_playSound(440, 255);
+        cross_playSound(saveData.sound, 440, 255);
       }
     }
 

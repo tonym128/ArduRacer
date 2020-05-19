@@ -103,8 +103,8 @@ bool cross_getPixel(int x, int y) {
     return arduboy.getPixel(x,y);
 }
 
-void cross_playSound(uint16_t hertz, uint8_t duration) {
-  sound.tone(hertz, duration); // play a 1000Hz tone for 500ms
+void cross_playSound(bool makeSound, uint16_t hertz, uint8_t duration) {
+  if (makeSound) sound.tone(hertz, duration); // play a 1000Hz tone for 500ms
 };
 
 void cross_setup()
