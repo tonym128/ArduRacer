@@ -117,11 +117,9 @@ bool cross_loop_start()
     frameTime = currentTime;
     currentTime = millis();
     frameMs = currentTime - frameTime;
-    if (frameMs == 0)
-        frameMs = 1;
     
     arduboy.setCursor(0, 0);
-    arduboy.pollButtons();
+    //arduboy.pollButtons();
 
     return true;
 }

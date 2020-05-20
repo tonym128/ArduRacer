@@ -3,15 +3,6 @@
 #include "fixpoint.h"
 constexpr uint8_t TIMED_LAPS = 5;
 
-enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    A,
-    B
-};
-
 struct Vec3 {
   FIXPOINT x,y;
   FIXPOINT direction;
@@ -68,7 +59,6 @@ struct GameState {
   Player player1;
 
   FIXPOINT StageX = FIXP_TO_INT(0), StageY = FIXP_TO_INT(0);
-
 
   uint8_t mode = 0;
   uint8_t lastmode = -1;
