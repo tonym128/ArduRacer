@@ -39,3 +39,4 @@
 # Build and test files
 *.ino
 *.eeprom
+*.hex
