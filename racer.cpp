@@ -6,11 +6,7 @@
 
 // #define NO_TROPHY
 // #define NO_LOGO
-
 // #define DEBUG_PERF
-#ifndef ARDUINO
-#define 
-#endif
 
 char string[30];
 SaveData saveData;
@@ -787,7 +783,6 @@ bool displayLevelZoom()
 
   if (headtoy > FIXP_TO_FLOAT(gameState->player1.Y) - 32)
     headtoy = FIXP_TO_FLOAT(gameState->player1.Y) - 32;
-
 
   headtox *= (pixelSize / 64.0f);
   headtoy *= (pixelSize / 64.0f);

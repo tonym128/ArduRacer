@@ -3,10 +3,19 @@
 #ifdef ESP32
 #include <ArduinoOTA.h>
 #define EEPROM_NEEDED_BYTES 1024
+#define EE_FILE 124
 // block in EEPROM to save high scores
 #endif
 
-#define EE_FILE 124
+#ifdef ESP32
+void gameLogicLoop(void *)
+{
+  while(1) {
+    racerLoop();
+    ArduinoOTA.handle();
+  }
+}
+#endif
 
 void setup()
 {
@@ -31,13 +40,3 @@ void loop()
   racerLoop();
 #endif
 }
-
-#ifdef ESP32
-void gameLogicLoop(void *)
-{
-  while(1) {
-    racerLoop();
-    ArduinoOTA.handle();
-  }
-}
-#endif
